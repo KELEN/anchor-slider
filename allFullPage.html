@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<link href="src/anchor-slider.css" rel="stylesheet" />
+		<style>
+			.fixed-nav {
+				position: fixed;
+				z-index: 999;
+			}
+		</style>
+	</head>
+
+	<body>
+		<nav class="fixed-nav">
+			<ul id="menu">
+				<li data-target="page1">one</li>
+				<li data-target="page2">two</li>
+				<li data-target="page3">three</li>
+			</ul>
+		</nav>
+		<div class="resume-wrapper">
+			<div class="section page1" style="background: yellowgreen; height: 300px">111</div>
+			<div class="section page2" style="background: cadetblue; height: 100px;">222</div>
+			<div class="section page3" style="background: cornflowerblue; height: 200px;">333</div>
+		</div>
+	</body>
+	<script type="text/javascript" src="dist/jquery.js"></script>
+	<script type="text/javascript" src="dist/jquery.anchor-slider.js"></script>
+
+	<script>
+		$.fn.anchorSlider('.resume-wrapper', {
+			anchors: ['page1', 'page2', 'page3'],
+			allFullPage: true,
+		});
+	</script>
+
+</html>
