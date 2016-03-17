@@ -25,7 +25,6 @@
 
 		var $container; // 包裹所有描点的元素
 		var $body = $('html body');
-		var windowHeight = $(window).height();
 		var currentIndex = 0; // 当前的位置
 		var sectionHeights = []; // 每个段落的高度
 		var canScroll = true; // 能否滚动
@@ -55,8 +54,6 @@
 			// 相应事件
 			afterSlideLoad: null,
 		}, options);
-
-
 
 		init();
 
@@ -99,8 +96,15 @@
 			sectionHeights = [];
 			// 对每个a标签定义一个点击事件
 			for (var i = 0; i < options.anchors.length; i++) {
+				// 设置每一页的顶部，这要对当前页面大于窗口时候插入高度，防止超过屏幕高度溢出看不到
+				var $pageEle = $('.' + options.anchors[i]);
 
-				sectionHeights.push($('.' + options.anchors[i]).position().top);
+				sectionHeights.push($pageEle.position().top);
+
+				if ($pageEle.height() > $(window).height()) {
+					sectionHeights.push($pageEle.position().top + $pageEle.height() - $(window).height());
+				}
+
 				$('.' + options.anchors[i]).addClass('as-section');
 
 				$('ul li[data-target="' + options.anchors[i] + '"]').click(function(e) {
@@ -176,6 +180,7 @@
 		 * 	设置满屏
 		 */
 		function setFullPage(ele) {
+			var windowHeight = $(window).height();
 			ele.css({
 				width: '100%',
 				height: windowHeight
@@ -224,21 +229,6 @@
 		}
 
 		/**
-		 *	鼠标滚动处理时间 
-		 */
-		function mouseWheelHandler(event) {
-			var event = event || window.event;
-			var delta = 0;
-			if (event.wheelDelta) {
-				// IE 或者 opera
-				delta = event.wheelDelta;
-			} else if (event.detail) {
-				// w3c
-				delta = -event.detail;
-			}
-		}
-
-		/**
 		 *	 查找数组的下标 
 		 * @param {Object} arr
 		 * @param {Object} val
@@ -263,9 +253,9 @@
 			if (event.wheelDelta) {
 				// IE 或者 opera
 				delta = event.wheelDelta;
-			} else if (event.detail) {
+			} else if (event.deltaY) {
 				// w3c
-				delta = -event.detail;
+				delta = -event.deltaY;
 			}
 			if (delta > 0) {
 				// 向上滚动
