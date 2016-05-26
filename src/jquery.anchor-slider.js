@@ -167,13 +167,17 @@
 		 */
 		function scrollToDest(top) {
 			canScroll = false;
-			$container.stop().animate({
-				top: -top
-			}, options.speed, function() {
-				currentIndex = findIndex(sectionHeights, Math.abs(top));
-				afterSlideLoaded(currentIndex);
-				canScroll = true;
-			});
+            $container.css({
+                transform: 'translate3D(0, ' + -top +'px, 0)',
+                '-webkit-transform': 'translate3D(0, ' + -top +'px, 0)',
+                '-moz-transform': 'translate3D(0, ' + -top +'px, 0)',
+                '-o-transform': 'translate3D(0, ' + -top +'px, 0)',
+            });
+            setTimeout(function() {
+                currentIndex = findIndex(sectionHeights, Math.abs(parseInt(top)));
+                afterSlideLoaded(currentIndex);
+                canScroll = true;
+            }, 500);
 		}
 
 		/*
@@ -187,7 +191,19 @@
 			});
 		}
 
-		/**
+        window.requestAnimFrame = (function(){
+            return  window.requestAnimationFrame ||
+                window.webkitRequestAnimationFrame ||
+                window.mozRequestAnimationFrame    ||
+                window.oRequestAnimationFrame      ||
+                window.msRequestAnimationFrame     ||
+                function(callback){
+                    window.setTimeout(callback, 1000 / 60);
+                };
+        })();
+
+
+        /**
 		 *	添加鼠标滚动事件 
 		 */
 		function addmouseWheelHandler() {
